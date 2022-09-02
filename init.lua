@@ -34,6 +34,7 @@ end
 local NewDissasemble = function(script: LocalScript|ModuleScript)
     return tostring(dissasemble(script))
 end
+local executor, version = identifyexecutor and identifyexecutor()
 
 local globalMethods = {
     checkCaller = checkcaller,
@@ -73,7 +74,8 @@ local globalMethods = {
     makeFolder = makefolder,
     isFolder = isfolder,
     isFile = isfile,
-    decompileScript=decompile or (dissasemble and NewDissasemble) or function(...) return 'Your exploit has no decompiler' end
+    decompileScript=decompile or (dissasemble and NewDissasemble) or function(...) return 'Your exploit has no decompiler' end,
+    isv3=(executor and version) and (executor == "Synapse X" and not version:find("v2"))
 }
 
 if PROTOSMASHER_LOADED then
@@ -194,7 +196,7 @@ local releaseInfo = HttpService:JSONDecode(game:HttpGetAsync("https://api.github
 
 if readFile and writeFile then
     local hasFolderFunctions = (isFolder and makeFolder) ~= nil
-    local ran, result = pcall(readFile, "hydroxide_version.txt")
+    local ran, result = pcall(readFile, (isv3 and "hydroxide_version.txt" or "version.oh"))
 
     if not ran or releaseInfo.tag_name ~= result then
         if hasFolderFunctions then
@@ -255,7 +257,7 @@ if readFile and writeFile then
             return unpack(assets)
         end
 
-        writeFile("hydroxide_version.txt", releaseInfo.tag_name)
+        writeFile((isv3 and "hydroxide_version.txt" or "version.oh"), releaseInfo.tag_name)
     elseif ran and releaseInfo.tag_name == result then
         function environment.import(asset)
             if importCache[asset] then
