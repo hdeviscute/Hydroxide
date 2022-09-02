@@ -16,7 +16,7 @@ local ContextMenu, ContextMenuButton = import("ui/controls/ContextMenu")
 local TabSelector = import("ui/controls/TabSelector")
 
 local Page = import("rbxassetid://5042109928").Base.Body.Pages.ConstantScanner
-local Assets = import("rbxassetid://5042114982").ConstantScanner
+local Assets = import("rbxassetid://10790482123").ConstantScanner
 
 local Query = Page.Query
 local Search = Query.Search

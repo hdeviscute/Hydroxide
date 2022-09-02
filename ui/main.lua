@@ -11,32 +11,34 @@ end
 import("ui/controls/TabSelector")
 local MessageBox, MessageType = import("ui/controls/MessageBox")
 
-local RemoteSpy
-local ClosureSpy
-local ScriptScanner
-local ModuleScanner
-local UpvalueScanner
-local ConstantScanner
+if isFile and isFile("ohQuickLoading.txt") then
+	local RemoteSpy
+	local ClosureSpy
+	local ScriptScanner
+	local ModuleScanner
+	local UpvalueScanner
+	local ConstantScanner
 
-xpcall(function()
-	RemoteSpy = import("ui/modules/RemoteSpy")
-	ClosureSpy = import("ui/modules/ClosureSpy")
-	ScriptScanner = import("ui/modules/ScriptScanner")
-	ModuleScanner = import("ui/modules/ModuleScanner")
-	UpvalueScanner = import("ui/modules/UpvalueScanner")
-	ConstantScanner = import("ui/modules/ConstantScanner")
-end, function(err)
-	local message
-	if err:find("valid member") then
-		message = "The UI has updated, please rejoin and restart. If you get this message more than once, screenshot this message and report it in the Hydroxide server.\n\n" .. err
-	else
-		message = "Report this error in Hydroxide's server:\n\n" .. err
-	end
+	xpcall(function()
+		RemoteSpy = import("ui/modules/RemoteSpy")
+		ClosureSpy = import("ui/modules/ClosureSpy")
+		ScriptScanner = import("ui/modules/ScriptScanner")
+		ModuleScanner = import("ui/modules/ModuleScanner")
+		UpvalueScanner = import("ui/modules/UpvalueScanner")
+		ConstantScanner = import("ui/modules/ConstantScanner")
+	end, function(err)
+		local message
+		if err:find("valid member") then
+			message = "The UI has updated, please rejoin and restart. If you get this message more than once, screenshot this message and report it to spongus#7609.\n\n" .. err
+		else
+			message = "Report this error to spongus#7609:\n\n" .. err
+		end
 
-	MessageBox.Show("An error has occurred", message, MessageType.OK, function()
-		Interface:Destroy() 
+		MessageBox.Show("An error has occurred", message, MessageType.OK, function()
+			Interface:Destroy() 
+		end)
 	end)
-end)
+end
 
 local constants = {
 	opened = UDim2.new(0.5, -325, 0.5, -175),
@@ -96,8 +98,6 @@ Collapse.MouseButton1Click:Connect(function()
 	Base:TweenPosition(constants.closed, "Out", "Quad", 0.15)
 	Open:TweenPosition(constants.reveal, "Out", "Quad", 0.15)
 end)
-
-MessageBox.Show("Welcome to Hydroxide", "This is not a finished product\n\nUPDATE: 1/8/22\nMy Discord account has been terminated, which means the status of the current Discord server is now in limbo. I have no plans to create a new server right now, but I do plan to in the near future.", MessageType.OK)
 
 Interface.Name = HttpService:GenerateGUID(false)
 if getHui then

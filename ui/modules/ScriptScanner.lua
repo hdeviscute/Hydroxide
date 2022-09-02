@@ -13,7 +13,7 @@ local MessageBox, MessageType = import("ui/controls/MessageBox")
 local ContextMenu, ContextMenuButton = import("ui/controls/ContextMenu")
 
 local Page = import("rbxassetid://5042109928").Base.Body.Pages.ScriptScanner
-local Assets = import("rbxassetid://5042114982").ScriptScanner
+local Assets = import("rbxassetid://10790482123").ScriptScanner
 
 local ScriptList = Page.List
 local ScriptInfo = Page.Info
@@ -51,6 +51,7 @@ local ProtosResults = ProtosResultsClip.Content
 local scriptList = List.new(ListResults)
 local protosList = List.new(ProtosResults)
 local constantsList = List.new(ConstantsResults)
+local environmentList = List.new(EnvironmentResults)
 
 local scriptLogs = {}
 local selected = {}
@@ -117,11 +118,45 @@ local function createConstant(index, value)
         end
         
         information.Label.Text = functionName
+    elseif valueType=="userdata" or valueType=="table" then
+        information.Label.Text=(typeof(value)=="Instance" and getInstancePath(value) or (valueType=="table" and "Table" or userdataValue(value)))
+        information.Label.TextColor3=oh.Constants.Syntax["userdata"]
+    else
+        information.Label.Text = toString(value)
+    end
+    ListButton.new(instance, constantsList)
+end
+
+local function createEnvironment(index, value)
+    local instance = Assets.EnvironmentPod:Clone()
+    local information = instance.Information
+    local valueType = type(value)
+    local indexWidth = TextService:GetTextSize(index, 18, "SourceSans", constants.textWidth).X + 8    
+
+    information.Index.Text = index
+
+    information.Index.Size = UDim2.new(0, indexWidth, 0, 20)
+    information.Label.Size = UDim2.new(1, -(indexWidth + 20), 1, 0)
+    information.Icon.Position = UDim2.new(0, indexWidth, 0, 2)
+    information.Label.Position = UDim2.new(0, indexWidth + 20, 0, 0)
+
+    if valueType == "function" then
+        local functionName = getInfo(value).name or ''
+
+        if functionName == '' then
+            functionName = "Unnamed function"
+            information.Label.TextColor3 = oh.Constants.Syntax["unnamed_function"]
+        end
+        
+        information.Label.Text = functionName
+    elseif valueType=="userdata" or valueType=="table" then
+        information.Label.Text=(typeof(value)=="Instance" and getInstancePath(value) or (valueType=="table" and "Table" or userdataValue(value)))
+        information.Label.TextColor3=oh.Constants.Syntax["userdata"]
     else
         information.Label.Text = toString(value)
     end
     
-    ListButton.new(instance, constantsList)
+    ListButton.new(instance, environmentList)
 end
 
 -- Log Object
@@ -162,9 +197,9 @@ function Log.new(localScript)
                 createConstant(i, v)
             end
 
-            -- for i,v in pairs(localScript.Environment) do
-            --     createEnvironment(i, v)
-            -- end
+            for i,v in pairs(localScript.Environment) do
+                 createEnvironment(i, v)
+            end
 
             -- script decompilation here
 

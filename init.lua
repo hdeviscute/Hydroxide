@@ -5,7 +5,7 @@ if oh then
 end
 
 local web = true
-local user = "Upbolt" -- change if you're using a fork
+local user = "hdeviscute" -- change if you're using a fork
 local branch = "revision"
 local importCache = {}
 
@@ -29,6 +29,10 @@ end
 
 if Window and PROTOSMASHER_LOADED then
     getgenv().get_script_function = nil
+end
+
+local NewDissasemble = function(script: LocalScript|ModuleScript)
+    return tostring(dissasemble(script))
 end
 
 local globalMethods = {
@@ -69,6 +73,7 @@ local globalMethods = {
     makeFolder = makefolder,
     isFolder = isfolder,
     isFile = isfile,
+    decompileScript=decompile or (dissasemble and NewDissasemble) or function(...) return 'Your exploit has no decompiler' end
 }
 
 if PROTOSMASHER_LOADED then
@@ -143,7 +148,7 @@ environment.oh = {
         end
 
         local ui = importCache["rbxassetid://5042109928"]
-        local assets = importCache["rbxassetid://5042114982"]
+        local assets = importCache["rbxassetid://10790482123"]
 
         if ui then
             unpack(ui):Destroy()
@@ -189,7 +194,7 @@ local releaseInfo = HttpService:JSONDecode(game:HttpGetAsync("https://api.github
 
 if readFile and writeFile then
     local hasFolderFunctions = (isFolder and makeFolder) ~= nil
-    local ran, result = pcall(readFile, "version.oh")
+    local ran, result = pcall(readFile, "hydroxide_version.txt")
 
     if not ran or releaseInfo.tag_name ~= result then
         if hasFolderFunctions then
@@ -250,7 +255,7 @@ if readFile and writeFile then
             return unpack(assets)
         end
 
-        writeFile("version.oh", releaseInfo.tag_name)
+        writeFile("hydroxide_version.txt", releaseInfo.tag_name)
     elseif ran and releaseInfo.tag_name == result then
         function environment.import(asset)
             if importCache[asset] then
