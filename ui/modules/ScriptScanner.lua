@@ -13,7 +13,7 @@ local MessageBox, MessageType = import("ui/controls/MessageBox")
 local ContextMenu, ContextMenuButton = import("ui/controls/ContextMenu")
 
 local Page = import("rbxassetid://5042109928").Base.Body.Pages.ScriptScanner
-local Assets = import("rbxassetid://10790482123").ScriptScanner
+local Assets = import("rbxassetid://5042114982").ScriptScanner
 
 local ScriptList = Page.List
 local ScriptInfo = Page.Info
@@ -128,7 +128,12 @@ local function createConstant(index, value)
 end
 
 local function createEnvironment(index, value)
-    local instance = Assets.EnvironmentPod:Clone()
+    local instance = Assets.ConstantPod:Clone()  
+
+    instance.Information.Icon.Image="http://www.roblox.com/asset/?id=5538723428"
+    instance.Information.Icon.ImageColor3=Color3.fromRGB(139, 190, 255)
+    instance.Name="EnvironmentPod"
+
     local information = instance.Information
     local valueType = type(value)
     local indexWidth = TextService:GetTextSize(index, 18, "SourceSans", constants.textWidth).X + 8    

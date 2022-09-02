@@ -150,7 +150,7 @@ environment.oh = {
         end
 
         local ui = importCache["rbxassetid://5042109928"]
-        local assets = importCache["rbxassetid://10790482123"]
+        local assets = importCache["rbxassetid://5042114982"]
 
         if ui then
             unpack(ui):Destroy()

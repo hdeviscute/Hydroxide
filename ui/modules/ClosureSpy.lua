@@ -16,7 +16,7 @@ local MessageBox, MessageType = import("ui/controls/MessageBox")
 local ContextMenu, ContextMenuButton = import("ui/controls/ContextMenu")
 
 local Base = import("rbxassetid://5042109928").Base
-local Assets = import("rbxassetid://10790482123").ClosureSpy
+local Assets = import("rbxassetid://5042114982").ClosureSpy
 
 local Prompts = Base.Prompts
 local Page = Base.Body.Pages.ClosureSpy
